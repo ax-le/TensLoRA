@@ -62,6 +62,7 @@ def get_classifier(
         tensor_path=tensor_path,
         tensor_persisted_name=tensor_persisted_name,
         seed=seed,
+        tensor_method=tensor_method,
         *args,
         **kwargs,
     )
@@ -156,7 +157,6 @@ def main(
     tensor_method: str = typer.Option(None, help="Method for tensor decomposition (e.g., 'att', 'qkv', 'depth')"),
     tensor_fac: str = typer.Option(None, help="Tensor factorization method for tenslora (cp or tucker)"),
     tensor_init: str = typer.Option("orthogonal", help="Tensor initialization method for tenslora (orthogonal, normal, or kaming_uniform)"),
-
     n_components: str = typer.Option("4",help="Number of components for TensLoRA. Expected to be a string, to pass either int or list of int. Use underscores to separate multiple components (e.g., '4_8_16')"),
     # Dataset
     dataset: str = typer.Option("cola", help="Dataset to use for training."),
@@ -167,10 +167,9 @@ def main(
     weight_decay: float = typer.Option(0.01, help="Weight decay"),
     dropout_prob: float = typer.Option(0.0, help="Dropout probability for LoRA layers"),
     # Seed and scaling
-    seed = typer.Option(None, help="Random seed for reproducibility"),
-
+    seed: int = typer.Option(None, help="Random seed for reproducibility"),
     # Other parameters
-    use_wandb: bool = typer.Option(True, help="Enable Wandb"),
+    use_wandb: bool = typer.Option(False, help="Enable Wandb"),
     save_directory: str = typer.Option(None, help="Directory to save tensors and model checkpoints"),
 ):
     # Set the device

@@ -97,7 +97,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
     # Other parameters
     test: bool = typer.Option(False, help="Run in test mode"),
     run_name: str = typer.Option("tensorlora-llm", help="Run name for logging"),
-    use_wandb: bool = typer.Option(True, help="Enable Wandb"),
+    use_wandb: bool = typer.Option(False, help="Enable Wandb"),
 ):
     # Init wandb if needed
     if use_wandb:
