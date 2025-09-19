@@ -350,7 +350,6 @@ class EUROSATDataset(Dataset):
                     ])
 
         dataset = EuroSAT(root = data_path)
-        print(len(dataset))
         train_set, test_set = random_split(dataset, [int(0.8*len(dataset)), int(0.2*len(dataset))])
         train_set = TransformedSubset(train_set, transform=train_transforms)
         test_set = TransformedSubset(test_set, transform=test_transforms)
