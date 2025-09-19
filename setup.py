@@ -24,8 +24,21 @@ setuptools.setup(
         "Programming Language :: Python :: 3"
     ],
     license='BSD',
-    install_requires=[
-
+    install_requires=[ # May be a bit harsh, but ensures compatibility
+        'datasets>=3.5.0',
+        'numpy>=2.2.5',
+        'opencv-python>=4.12.0.88',
+        'peft>=0.15.2',
+        'pillow>=11.2.1',
+        'scikit-learn>=1.7.1',
+        'tensorly>=0.9.0',
+        'tensorly-torch>=0.5.0',
+        'torch>=2.7.0',
+        'torchvision>=0.22.0',
+        'tqdm>=4.67.1',
+        'transformers>=4.51.3',
+        'typer>=0.16.0',
+        'wandb>=0.19.11',
     ],
     python_requires='>=3.12',
 )

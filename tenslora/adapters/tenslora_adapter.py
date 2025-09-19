@@ -1,7 +1,7 @@
 import numpy as np
 from torch import nn
 
-import tenslora.tensors.tensors_manipulator as tensors_manipulator
+import tenslora.tensors_manipulator as tensors_manipulator
 
 # The adapter module for TensLoRA.
 # It may be too complex, TODO: simplify the hierarchy of functions.
