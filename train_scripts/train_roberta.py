@@ -84,7 +84,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
     tensor_method: str = typer.Option(None, help="Method for tensor decomposition (e.g., 'att', 'qkv', 'depth')"),
     # tensor_fac: str = typer.Option(None, help="Tensor factorization method for tenslora (cp or tucker)"),
     # tensor_init: str = typer.Option("orthogonal", help="Tensor initialization method for tenslora (orthogonal, normal, or kaming_uniform)"),
-
     n_components: str = typer.Option("4",help="Number of components for TensLoRA. Expected to be a string, to pass either int or list of int. Use underscores to separate multiple components (e.g., '4_8_16')"),
     # Dataset
     dataset: str = typer.Option("cola", help="Dataset to use for training. Options: 'tldr', 'xsum'"),
@@ -94,7 +93,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
     batch_size: int = typer.Option(64, help="Batch size per GPU"),
     # weight_decay: float = typer.Option(0.01, help="Weight decay"),
     # dropout_prob: float = typer.Option(0.0, help="Dropout probability for LoRA layers"),
-    seed = typer.Option(None, help="Random seed for reproducibility"),
+    seed: int = typer.Option(None, help="Random seed for reproducibility"),
     # Other parameters
     test: bool = typer.Option(False, help="Run in test mode"),
     run_name: str = typer.Option("tensorlora-llm", help="Run name for logging"),
@@ -127,6 +126,12 @@ def main(  # noqa: C901, PLR0912, PLR0915
     else:
         raise ValueError(f"Unsupported type for n_components: {type(n_components)}. Expected str.")
 
+    tokenizer = AutoTokenizer.from_pretrained(
+        DEFAULT_MODEL_PATH,
+        cache_dir=CACHE_DIR,
+        use_fast=True,
+    )
+
     ## Dataset setup
     # Dataset parameters
     train_dataloader, validation_dataloader, num_classes = get_glue_dataset(tokenizer, batch_size, dataset, test=test)
@@ -138,12 +143,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
     )
 
     ## Model setup
-    tokenizer = AutoTokenizer.from_pretrained(
-        DEFAULT_MODEL_PATH,
-        cache_dir=CACHE_DIR,
-        use_fast=True,
-    )
-
     model = get_classifier(
         num_classes,
         lora_type, 
@@ -154,7 +153,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
         # tensor_fac=tensor_fac,
         # tensor_init=tensor_init,
     )
-    model.to("cuda")
     print("Model loaded successfully!")
 
     # Print the LoRA type and parameters
@@ -265,6 +263,8 @@ def main(  # noqa: C901, PLR0912, PLR0915
 
     best_acc = 0
     best_mcc = 0
+
+    model.to("cuda")
 
     while step < n_steps:
         model.train()
